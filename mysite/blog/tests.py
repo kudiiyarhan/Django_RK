@@ -9,3 +9,7 @@ class HomePageTest(TestCase):
 
         found = resolve('/')
         self.assertEquals(found.func, home_page)
+
+
+    def test_home_page_return_correct_html(self):
+        pass
