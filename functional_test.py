@@ -31,12 +31,9 @@ class BasicInstallTest(unittest.TestCase):
         '''тест наличия текста (Алексей Куличевский) в заголовке сайта'''
         # В шапке сайта написано 'Алексей Куличевский'
 
-        browser = self.browser.get('http://127.0.0.1:8000')
-        header = browser.find_element(By.TAG_NAME, 'h1')
-        #self.assertTrue('Алексей Куличевский', header)
+        self.browser.get('http://127.0.0.1:8000')
+        header = self.browser.find_element(By.TAG_NAME, 'h1').text
         self.assertIn('Алексей Куличевский', header)
-
-
 
 
 
