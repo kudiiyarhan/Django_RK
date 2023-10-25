@@ -19,21 +19,46 @@ class BasicInstallTest(unittest.TestCase):
 
         self.browser.quit()
 
+    # В браузере Васи открылся сайт по адресу http://127.0.0.1:8000
+    # В заголовке сайта Вася прочитал 'Сайт Алексея Куличевского'
     def test_home_page_title(self):
         '''тест наличия слова на главной странице в тайтле.'''
-        # В браузере Васи открылся сайт по адресу http://127.0.0.1:8000
-        # В заголовке сайта Вася прочитал 'Сайт Алексея Куличевского'
+
 
         self.browser.get('http://127.0.0.1:8000')
         self.assertIn('Сайт Алексея Куличевского', self.browser.title)
 
+
+
+    # В шапке сайта написано 'Алексей Куличевский'
     def test_home_page_header(self):
         '''тест наличия текста (Алексей Куличевский) в заголовке сайта'''
-        # В шапке сайта написано 'Алексей Куличевский'
+
 
         self.browser.get('http://127.0.0.1:8000')
         header = self.browser.find_element(By.TAG_NAME, 'h1').text
         self.assertIn('Алексей Куличевский', header)
+
+
+    # Под шапкой расположен блог со статьями
+    def test_home_page_blog(self):
+        '''тест блока блог'''
+        self.browser.get('http://127.0.0.1:8000')
+        article_list = self.browser.find_element(By.CLASS_NAME, 'article-list')
+        self.assertTrue(article_list)
+
+
+    # У каждой статьи есть заголовок и один абзац с текстом
+    def test_home_page_articles_look_correct(self):
+        '''тест проверяющий наличие заголовка и статьи в блоге'''
+        self.browser.get('http://127.0.0.1:8000')
+        article_title = self.browser.find_element(By.CLASS_NAME, 'article-title')
+        article_summary = self.browser.find_element(By.CLASS_NAME, 'article-summary')
+        self.assertTrue(article_title)
+        self.assertTrue(article_summary)
+
+
+
 
 
 

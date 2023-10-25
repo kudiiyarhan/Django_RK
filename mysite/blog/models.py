@@ -1,3 +1,13 @@
 from django.db import models
 
-# Create your models here.
+
+# создаем класс Article с полями
+class Article(models.Model):
+    title = models.CharField(max_length=255)
+    summary = models.CharField(max_length=250)
+    full_text = models.TextField()
+    category = models.CharField(max_length=250)
+    pubdate = models.DateTimeField()
+    objects = models.Manager()
+    # slug = # TODO
+    # is_published = models.BooleanField() #TODO

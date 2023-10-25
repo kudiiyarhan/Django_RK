@@ -1,0 +1,14 @@
+<html>
+    <title>Сайт Алексея Куличевского</title>
+    <h1>Алексей Куличевский</h1>
+
+    <div class="article-list">
+<!--        с помощью языка шаблонов и созданного во вьюхе словаря достаем заголовки статей-->
+        {% for article in articles %}
+            <div class="article">
+                <h2 class="article-totle">{{ article.title }}</h2>
+                <p class="article-summary">{{ article.summary }}</p>
+            </div>
+        {% endfor %}
+    </div>
+</html>
