@@ -58,7 +58,23 @@ class BasicInstallTest(unittest.TestCase):
         self.assertTrue(article_summary)
 
 
+    # Вася кликнул по заголовку и у него открылась страница с полным текстом статьи
+    def test_home_page_article_title_link_leads_to_article_page(self):
+        '''тест ссылки ведущей на полный текст статьи'''
 
+        # открываем главную страницу
+        self.browser.get('http://127.0.0.1:8000')
+        # находим заголовок статьи
+        article_title = self.browser.find_element(By.CLASS_NAME, 'article-title')
+        # ??????????????????????????????????????
+        article_title_text = article_title.text
+        # находим ссылку в заголовке статьи
+        article_link = article_title.find_element(By.TAG_NAME, 'a')
+        # переходим по ссылке
+        self.browser.get(article_link.get_attribute('href'))
+        # проверяем что на открывшейся странице есть нужная статья
+        article_page_title = self.browser.find_element(By.CLASS_NAME, 'article-title')
+        self.assertEqual(article_title_text, article_page_title.text)
 
 
 
@@ -77,4 +93,5 @@ if __name__ == '__main__':
 # Под шапкой расположен блог со статьями
 # У каждой статьи есть заголовок и один абзац с текстом
 # Вася кликнул по заголовку и у него открылась страница с полным текстом статьи
+# Вася попытался открыть не существующую статью и попал на страницу 404
 # Прочитав статью Вася кликнул по тексту 'Алексей Куличевский' и попал на главную страницу

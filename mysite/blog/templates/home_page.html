@@ -6,7 +6,9 @@
 <!--        с помощью языка шаблонов и созданного во вьюхе словаря достаем заголовки статей-->
         {% for article in articles %}
             <div class="article">
-                <h2 class="article-totle">{{ article.title }}</h2>
+                <h2 class="article-title">
+                    <a href="blog/{{ article.slug }}">{{ article.title }}</a>
+                </h2>
                 <p class="article-summary">{{ article.summary }}</p>
             </div>
         {% endfor %}

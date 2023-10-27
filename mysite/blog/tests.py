@@ -1,9 +1,34 @@
 from django.test import TestCase
 from django.urls import resolve
-from .views import home_page
+from .views import home_page, article_page
 from .models import Article
 from django.http import HttpRequest
 from datetime import datetime
+import pytz
+
+# тест новой страницы блога на которую переходит Вася при клике на тайтл для просмотра полного текста
+class ArticlePageTest(TestCase):
+    def test_article_page_displays_correct_articles(self):
+        '''наличие статьи при переходе на новую страницу по ссылке'''
+        # создаем статью
+        Article.objects.create(
+            title='title 1',
+            summary='summary 1',
+            full_text='full_text 1',
+            pubdate=datetime.utcnow().replace(tzinfo=pytz.utc),
+            slug='ooo'
+        )
+
+        # делаем запрос страницы со статьей
+        request = HttpRequest()
+        response = article_page(request, 'ooo')
+        html = response.content.decode('utf8')
+
+        self.assertIn('title 1', html)
+        self.assertIn('full_text 1', html)
+        self.assertNotIn('summary 1', html)
+
+
 
 
 # тест проверяющий домашнюю страницу
@@ -15,14 +40,16 @@ class HomePageTest(TestCase):
             title='title 1',
             summary='summary 1',
             full_text='full_text 1',
-            pubdate=datetime.now()
+            pubdate=datetime.utcnow().replace(tzinfo=pytz.utc),
+            slug='slug-1'
         )
 
         Article.objects.create(
             title='title 2',
             summary='summary 2',
             full_text='full_text 2',
-            pubdate=datetime.now()
+            pubdate=datetime.utcnow().replace(tzinfo=pytz.utc),
+            slug='slug-2'
         )
 
         request = HttpRequest()
@@ -30,10 +57,13 @@ class HomePageTest(TestCase):
         html = response.content.decode('utf8')
 
         self.assertIn('title 1', html)
+        # проверяем есть ли ссылка на полную статью
+        self.assertIn('blog/slug-1', html)
         self.assertIn('summary 1', html)
         self.assertNotIn('full_text 1', html)
 
         self.assertIn('title 2', html)
+        self.assertIn('blog/slug-2', html)
         self.assertIn('summary 2', html)
         self.assertNotIn('full_text 2', html)
 
@@ -76,7 +106,8 @@ class ArticleModelTest(TestCase):
             full_text='full_text 1',
             summary='summaru 1',
             category='category 1',
-            pubdate=datetime.now())
+            pubdate=datetime.utcnow().replace(tzinfo=pytz.utc),
+            slug='slug-1')
         article1.save()
 
         # создай статью 2
@@ -86,7 +117,8 @@ class ArticleModelTest(TestCase):
             full_text='full_text 2',
             summary='summaru 2',
             category='category 2',
-            pubdate=datetime.now())
+            pubdate=datetime.utcnow().replace(tzinfo=pytz.utc),
+            slug='slug-2')
         article2.save()
 
         # загрузи из базы все статьи
@@ -98,3 +130,7 @@ class ArticleModelTest(TestCase):
         self.assertEqual(all_articles[0].title, article1.title)
         # проверь: 2 загруженная из базы статья == статья 2
         self.assertEqual(all_articles[1].title, article2.title)
+        # проверяем наличие slug1
+        self.assertEqual(all_articles[0].slug, article1.slug)
+        # проверяем наличие slug2
+        self.assertEqual(all_articles[1].slug, article2.slug)

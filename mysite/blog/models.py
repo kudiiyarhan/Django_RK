@@ -8,6 +8,11 @@ class Article(models.Model):
     full_text = models.TextField()
     category = models.CharField(max_length=250)
     pubdate = models.DateTimeField()
+    slug = models.CharField(max_length=255, unique=True)
     objects = models.Manager()
-    # slug = # TODO
     # is_published = models.BooleanField() #TODO
+
+    # меняем название тайтла в админке
+    def __str__(self):
+        return self.title
+
